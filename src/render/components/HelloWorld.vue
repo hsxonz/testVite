@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { sendMsgToMainProcess } from '@render/api'
+import { sendMsgToIcp, sendMsgToMainProcess } from '@render/api'
 import { useIpc } from '@render/plugins/ipc'
 import { ref } from 'vue'
 
@@ -24,11 +24,15 @@ const sendMsg = async () => {
   }
 }
 
-const ipc = useIpc()
+const sendIcp = async () => {
+  await sendMsgToIcp(msg.value)
+}
 
-ipc.on('reply-msg', (msg: string) => {
-  log.value += `[main]: ${msg}  \n`
-})
+// const ipc = useIpc()
+
+// ipc.on('reply-msg', (msg: string) => {
+//   log.value += `[main]: ${msg}  \n`
+// })
 </script>
 
 <template>
@@ -39,6 +43,10 @@ ipc.on('reply-msg', (msg: string) => {
     <input v-model="msg" type="text" placeholder="send msg to main process">
     <button style="margin-left: 20px" @click="sendMsg">
       Send
+    </button>
+
+    <button style="margin-left: 20px" @click="sendIcp">
+      send data icp
     </button>
   </div>
 </template>
